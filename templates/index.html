@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tumor Classifier</title>
+    <style>
+        body {
+            font-size: 30px;
+            text-align: center;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            background-image: "D:/MASAÜSTÜNDE OLANLAR/deneme/second/templates/back.png";
+            background-color: black;
+            color: white;
+        }
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .logo {
+            width: 200px;
+        }
+        .centered {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            height: 100px;
+        }
+        h1{
+            margin-top : 300px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 54px;
+            text-align: left;
+            padding-left: 40px;
+
+        } 
+        h2 {
+            margin-top : 100px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 48px;
+        }
+        .choose_box{
+            position: absolute;
+            top: 250px; 
+            right: 120px; 
+            width: 600px; 
+            height: 300px;
+            padding: 20px;
+            background-color: #020202; /* Kutunun arka plan rengi */
+            border: 1px solid #360227; /* Kutunun kenarlığı */
+            box-shadow: 0 0 150px rgba(255, 255, 255, 0.5); /* Hafif gölge efekti */
+            border-radius: 30px;
+        }
+        .upload-container {
+            position: relative;
+            margin-top: 100px;
+            margin-bottom: 20px;
+        }
+        #file-input {
+            display: none;
+        }
+        .upload-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-button:hover {
+            background-color: #0056b3;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .message-content {
+            background-color: #000000;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            
+        }
+        .about{
+            margin: 20px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 30px;
+            text-align: left;
+            padding-left: 40px;
+        }
+        
+        tesekkur{
+            background-color: #000000; 
+            padding: 20px;
+        }
+        .tesekkur {
+            background-color: #000000;
+            padding: 20px;
+            margin: auto; /* Dikey hizalamayı sağlar */
+            margin-top: 250px; /* İstediğiniz üst boşluk */
+            margin-bottom: auto; /* Dikey hizalamayı sağlar */
+            width: fit-content; /* İçeriğe uygun genişlik */
+            border-radius: 30px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 30px;
+            border: none; /* Kenarlık kaldırma */
+        }
+
+
+        </style>
+</head>
+<body>
+    <div class="header">
+        <img src="logo.png" alt="Bursa Uludağ Üniversitesi" class="logo">
+    </div>
+    <h1>Brain Tumor Classification</h1>
+    <div class="about">
+        <p>
+              Bu çalışmada derin öğrenme ile beyin tümörü sınıflandırılması <br>yapılmaktadır.
+            Tümörün tespit edileceği MRI görüntüsünü yükledikten <br>sonra 'send' butonuna tıklayın.
+            Daha sonra sonuç ekranda yazacaktır.
+        </p>
+    </div>
+    <div class="choose_box">
+        <form action="/predict" method="post" enctype="multipart/form-data" class="centered">
+            <div class="upload-container">
+                <input type="file" name="file" id="file-input" accept="image/*">
+                <label for="file-input" class="upload-button">Upload Image</label>
+            </div>
+            <button type="submit">Send</button>
+        </form>
+        <div id="message" class="hidden">
+            <div id="message-content" class="message-content">
+                {% if prediction %}
+                <h2 class="centered">Sonuç: {{ prediction }}</h2>
+                {% endif %}
+            </div>
+        </div>
+    
+    </div>
+    <div class="tesekkur">
+        <p>Yardımı ve danışmanlığı için Doç. Dr. Gıyasettin Özcan'a teşekkür ederiz.</p>
+    </div>
+    
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const img = document.getElementById("uploaded-image");
+                img.src = reader.result;
+                document.getElementById("image-preview").style.display = "block";
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+        const fileInput = document.querySelector('input[type="file"]');
+        fileInput.addEventListener('change', previewImage);
+        document.getElementById("upload-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        document.getElementById("submit-button").disabled = true;
+
+        var messageDiv = document.getElementById("message");
+        messageDiv.classList.remove("hidden");
+
+        var messageContentDiv = document.getElementById("message-content");
+        messageContentDiv.innerText = "Image Sent";
+        setTimeout(function() {
+            messageDiv.classList.add("hidden");
+            document.getElementById("submit-button").disabled = false;
+            document.getElementById("upload-form").reset();
+        }, 2000);
+    });
+    </script>
+</body>
+</html>
