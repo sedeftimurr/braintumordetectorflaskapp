@@ -7,7 +7,7 @@ from keras.preprocessing import image
 app = Flask(__name__)
 
 # Eğitilmiş modelin yüklenmesi
-model = load_model('D:/MASAÜSTÜNDE OLANLAR/deneme/second/model.h5')
+model = load_model('model_4.h5')
 
 # Ana sayfa
 @app.route('/')
