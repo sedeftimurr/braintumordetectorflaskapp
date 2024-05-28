@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,request
 from werkzeug.utils import secure_filename
 from keras.models import load_model
 import numpy as np
