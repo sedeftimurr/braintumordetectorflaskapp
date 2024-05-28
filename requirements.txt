@@ -33,7 +33,6 @@ pillow==10.3.0
 protobuf==4.25.3
 Pygments==2.18.0
 PySocks==1.7.1
-requests==2.32.2
 rich==13.7.1
 six==1.16.0
 soupsieve==2.5
